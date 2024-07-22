@@ -31,43 +31,16 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
-
     public void setParentId(Long parentId) {
         this.parentId = parentId;
-    }
-
-    public List<CategoryDTO> getChildren() {
-        return children;
     }
 
     public void setChildren(List<CategoryDTO> children) {
         this.children = children;
     }
 
-    public List<ProductDTO> getProducts() {
-        return products;
-    }
-
     public void setProducts(List<ProductDTO> products) {
         this.products = products;
     }
 
-    public void addChild(CategoryDTO child) {
-        this.children.add(child);
-    }
-
-    public void removeChild(CategoryDTO child) {
-        this.children.remove(child);
-    }
-
-    public void addProduct(ProductDTO product) {
-        this.products.add(product);
-    }
-
-    public void removeProduct(ProductDTO product) {
-        this.products.remove(product);
-    }
 }

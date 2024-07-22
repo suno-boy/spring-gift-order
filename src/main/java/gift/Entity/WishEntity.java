@@ -40,10 +40,6 @@ public class WishEntity {
         return user;
     }
 
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
     public ProductEntity getProduct() {
         return product;
     }
@@ -54,9 +50,5 @@ public class WishEntity {
 
     public String getProductName() {
         return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 }
