@@ -52,7 +52,7 @@ public class OptionService {
 
 
     @Transactional
-    public OptionDTO substractQuantity(Long id,Long substractQuantity, OptionDTO optionDTO) {
+    public OptionDTO substractQuantity(Long id, Long substractQuantity, OptionDTO optionDTO) {
         OptionEntity optionEntity = optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
         if (!optionEntity.getName().equals(optionDTO.getName())) {
             validateOptionNameUniqueness(optionDTO.getName(), optionDTO.getProductId());
