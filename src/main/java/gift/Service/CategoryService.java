@@ -39,9 +39,7 @@ public class CategoryService {
         return convertToDTO(existingCategory);
     }
 
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
-    }
+    // cascade설정으로 인한 deleteCategory 기능은 필요 없어짐
 
     private CategoryDTO convertToDTO(CategoryEntity categoryEntity) {
         if (categoryEntity == null) {

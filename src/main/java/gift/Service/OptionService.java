@@ -67,9 +67,7 @@ public class OptionService {
     }
 
 
-    public void deleteOption(Long id) {
-        optionRepository.deleteById(id);
-    }
+    // cascade설정으로 인한 deleteOption 기능은 필요 없어짐
 
     private OptionDTO convertToDTO(OptionEntity optionEntity) {
         return new OptionDTO(

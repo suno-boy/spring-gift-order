@@ -38,12 +38,7 @@ public class UserService {
         return userRepository.save(userEntity);
     }
 
-    public void deleteUser(Long id) {
-        // UserEntity에서 WishEntity와의 연관 관계를
-        // cascade = CascadeType.ALL로 설정해놓았기 때문에
-        // 관련 Wish는 따로 삭제할 필요가 없음.
-        userRepository.deleteById(id);
-    }
+    // cascade설정으로 인한 deleteUser 기능은 필요 없어짐
 
     public String generateToken(UserEntity userEntity) {
         Claims claims = createClaims(userEntity);

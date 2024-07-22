@@ -30,9 +30,7 @@ public class WishService {
         return wishRepository.save(wishEntity);
     }
 
-    public void deleteWish(Long id) {
-        wishRepository.deleteById(id);
-    }
+    // cascade설정으로 인한 deleteWish 기능은 필요 없어짐
 
     public Page<WishDTO> getWishes(Pageable pageable) {
         Page<WishEntity> wishPage = wishRepository.findAll(pageable);

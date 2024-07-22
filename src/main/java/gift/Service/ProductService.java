@@ -39,7 +39,7 @@ public class ProductService {
     public void deleteProduct(Long id) {
         // ProductEntity에서 WishEntity와의 연관 관계를
         // cascade = CascadeType.ALL로 설정해놓았기 때문에
-        // 관련 Wish는 따로 삭제할 필요가 없음.
+        // 관련 Wish, 카테고리, 옵션은 따로 삭제할 필요가 없음.
         productRepository.deleteById(id);
     }
 
