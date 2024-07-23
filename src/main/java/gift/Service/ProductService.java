@@ -37,9 +37,9 @@ public class ProductService {
     }
 
     public ProductEntity updateProduct(Long id, ProductEntity productEntity) {
-        Optional<ProductEntity> existingProductOpt = productRepository.findById(id);
-        if (existingProductOpt.isPresent()) {
-            ProductEntity existingProduct = existingProductOpt.get();
+        Optional<ProductEntity> existingProductOption = productRepository.findById(id);
+        if (existingProductOption.isPresent()) {
+            ProductEntity existingProduct = existingProductOption.get();
             existingProduct.setName(productEntity.getName());
             existingProduct.setPrice(productEntity.getPrice());
             existingProduct.setImageUrl(productEntity.getImageUrl());

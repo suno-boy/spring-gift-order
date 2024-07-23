@@ -7,7 +7,6 @@ import gift.Repository.OptionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +17,9 @@ public class OptionService {
     @Autowired
     private OptionRepository optionRepository;
 
+
+    // DB에 접근하기 때문에 트랜잭션 처리 추가
+    @Transactional
     public OptionDTO createOption(OptionDTO optionDTO) {
         validateOptionNameUniqueness(optionDTO.getName(), optionDTO.getProductId());
         OptionEntity optionEntity = new OptionEntity(
@@ -39,6 +41,8 @@ public class OptionService {
         return optionEntities.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    // DB에 접근하기 때문에 트랜잭션 처리 추가
+    @Transactional
     public OptionDTO updateOption(Long id, OptionDTO optionDTO) {
         OptionEntity optionEntity = findOptionEntityById(id);
         if (!optionEntity.getName().equals(optionDTO.getName())) {
@@ -50,30 +54,28 @@ public class OptionService {
         return convertToDTO(optionEntity);
     }
 
-
     @Transactional
-    public OptionDTO substractQuantity(Long id, Long substractQuantity, OptionDTO optionDTO) {
+    public OptionDTO subtractQuantity(Long id, Long subtractQuantity, OptionDTO optionDTO) {
         OptionEntity optionEntity = findOptionEntityById(id);
         if (!optionEntity.getName().equals(optionDTO.getName())) {
             validateOptionNameUniqueness(optionDTO.getName(), optionDTO.getProductId());
         }
-        if(substractQuantity > optionEntity.getQuantity()) {
+        if(subtractQuantity > optionEntity.getQuantity()) {
             throw new RuntimeException("감소시키려는 수량보다 남은 재고가 적습니다.");
         }
-        optionEntity.setQuantity(optionEntity.getQuantity() - substractQuantity);
+        optionEntity.setQuantity(optionEntity.getQuantity() - subtractQuantity);
         optionEntity.setName(optionDTO.getName());
         optionEntity = optionRepository.save(optionEntity);
         return convertToDTO(optionEntity);
     }
 
-    // cascade설정으로 인한 deleteOption 기능은 필요 없어진듯 했으나, 컨트롤러 계층에서 옵션을 따로 delete할
-    // 수 있어서 일단 다시 생성해놓음.
+    // DB에 접근하기 때문에 트랜잭션 처리 추가
+    @Transactional
     public void deleteOption(Long id) {
         optionRepository.deleteById(id);
     }
 
-
-    // 멘토님의 피드백대로 중복 코드 해결을 위한 private 메서드
+    // Private methods
     private OptionEntity findOptionEntityById(Long id) {
         return optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
     }
@@ -95,5 +97,4 @@ public class OptionService {
             }
         }
     }
-
 }
