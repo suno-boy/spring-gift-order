@@ -3,9 +3,11 @@ package gift.Controller;
 import gift.Entity.UserEntity;
 import gift.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -16,8 +18,8 @@ public class AuthController {
     private UserService userService;
 
     @GetMapping("/users")
-    public List<UserEntity> getAllUsers() {
-        return userService.findAllUsers();
+    public Page<UserEntity> getAllUsers(Pageable pageable) {
+        return userService.findAllUsers((org.springframework.data.domain.Pageable) pageable);
     }
 
     @GetMapping("/users/{id}")

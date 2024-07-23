@@ -7,11 +7,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import gift.Exception.UnauthorizedException; // 추가된 import
+import gift.Exception.UnauthorizedException;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,10 +27,9 @@ public class UserService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public List<UserEntity> findAllUsers() {
-        return userRepository.findAll();
+    public Page<UserEntity> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
-
     public Optional<UserEntity> findUserById(Long id) {
         return userRepository.findById(id);
     }
@@ -38,7 +38,9 @@ public class UserService {
         return userRepository.save(userEntity);
     }
 
-    // cascade설정으로 인한 deleteUser 기능은 필요 없어짐
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
 
     public String generateToken(UserEntity userEntity) {
         Claims claims = createClaims(userEntity);

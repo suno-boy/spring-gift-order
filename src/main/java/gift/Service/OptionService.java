@@ -86,4 +86,8 @@ public class OptionService {
             }
         }
     }
+
+    public void deleteOption(Long id) {
+        optionRepository.deleteById(id);
+    }
 }

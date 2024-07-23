@@ -45,4 +45,8 @@ public class WishService {
                 wishEntity.getProductName()
         );
     }
+
+    public void deleteWish(Long id) {
+        wishRepository.deleteById(id);
+    }
 }
