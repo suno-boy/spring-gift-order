@@ -40,6 +40,10 @@ public class WishEntity {
         return user;
     }
 
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     public ProductEntity getProduct() {
         return product;
     }

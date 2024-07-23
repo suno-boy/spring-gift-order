@@ -1,7 +1,6 @@
 package gift.Controller;
 
 import gift.DTO.ProductDTO;
-import gift.Entity.ProductEntity;
 import gift.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,17 +31,17 @@ public class ProductViewController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductEntity> createProduct(@RequestBody ProductEntity productEntity) {
-        ProductEntity savedProduct = productService.saveProduct(productEntity);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
+        ProductDTO savedProduct = productService.saveProduct(productDTO);
         return ResponseEntity.ok(savedProduct);
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<ProductEntity> updateProduct(@PathVariable Long id, @RequestBody ProductEntity productEntity) {
-        ProductEntity updatedProduct = productService.updateProduct(id, productEntity);
-        if (updatedProduct != null) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        try {
+            ProductDTO updatedProduct = productService.updateProduct(id, productDTO);
             return ResponseEntity.ok(updatedProduct);
-        } else {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }

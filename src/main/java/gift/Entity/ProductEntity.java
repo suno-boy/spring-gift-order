@@ -40,6 +40,10 @@ public class ProductEntity {
         this.imageUrl = imageUrl;
     }
 
+    public ProductEntity(Long productId) {
+        this.id = productId;
+    }
+
     public List<OptionEntity> getOptions() {
         return options;
     }

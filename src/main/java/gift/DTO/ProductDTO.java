@@ -26,6 +26,18 @@ public class ProductDTO {
         this.options = options;
     }
 
+    public List<WishDTO> getWishes() {
+        return wishes;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public List<OptionDTO> getOptions() {
+        return options;
+    }
+
     public Long getId() {
         return id;
     }

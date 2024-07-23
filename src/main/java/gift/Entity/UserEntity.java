@@ -1,6 +1,8 @@
 package gift.Entity;
 
 import jakarta.persistence.*;
+import org.apache.catalina.User;
+
 import java.util.List;
 
 @Entity
@@ -20,6 +22,10 @@ public class UserEntity {
         this.password = password;
     }
 
+    public UserEntity(Long userId) {
+        this.id = userId;
+    }
+
     public UserEntity() {}
 
     public Long getId() {
@@ -32,6 +38,22 @@ public class UserEntity {
 
     public String getEmail() {
         return email;
+    }
+
+    public List<WishEntity> getWishes() {
+        return wishes;
+    }
+
+    public void setWishes(List<WishEntity> wishes) {
+        this.wishes = wishes;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

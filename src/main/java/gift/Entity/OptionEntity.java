@@ -59,6 +59,10 @@ public class OptionEntity {
         this.quantity = quantity;
     }
 
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
