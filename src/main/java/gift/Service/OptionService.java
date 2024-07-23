@@ -30,7 +30,7 @@ public class OptionService {
     }
 
     public OptionDTO getOptionById(Long id) {
-        OptionEntity optionEntity = optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
+        OptionEntity optionEntity = findOptionEntityById(id);
         return convertToDTO(optionEntity);
     }
 
@@ -40,7 +40,7 @@ public class OptionService {
     }
 
     public OptionDTO updateOption(Long id, OptionDTO optionDTO) {
-        OptionEntity optionEntity = optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
+        OptionEntity optionEntity = findOptionEntityById(id);
         if (!optionEntity.getName().equals(optionDTO.getName())) {
             validateOptionNameUniqueness(optionDTO.getName(), optionDTO.getProductId());
         }
@@ -53,7 +53,7 @@ public class OptionService {
 
     @Transactional
     public OptionDTO substractQuantity(Long id, Long substractQuantity, OptionDTO optionDTO) {
-        OptionEntity optionEntity = optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
+        OptionEntity optionEntity = findOptionEntityById(id);
         if (!optionEntity.getName().equals(optionDTO.getName())) {
             validateOptionNameUniqueness(optionDTO.getName(), optionDTO.getProductId());
         }
@@ -66,8 +66,17 @@ public class OptionService {
         return convertToDTO(optionEntity);
     }
 
+    // cascade설정으로 인한 deleteOption 기능은 필요 없어진듯 했으나, 컨트롤러 계층에서 옵션을 따로 delete할
+    // 수 있어서 일단 다시 생성해놓음.
+    public void deleteOption(Long id) {
+        optionRepository.deleteById(id);
+    }
 
-    // cascade설정으로 인한 deleteOption 기능은 필요 없어짐
+
+    // 멘토님의 피드백대로 중복 코드 해결을 위한 private 메서드
+    private OptionEntity findOptionEntityById(Long id) {
+        return optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
+    }
 
     private OptionDTO convertToDTO(OptionEntity optionEntity) {
         return new OptionDTO(
@@ -87,7 +96,4 @@ public class OptionService {
         }
     }
 
-    public void deleteOption(Long id) {
-        optionRepository.deleteById(id);
-    }
 }
