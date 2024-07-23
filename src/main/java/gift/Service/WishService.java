@@ -1,11 +1,13 @@
 package gift.Service;
 
 import gift.DTO.WishDTO;
+import gift.Entity.ProductEntity;
 import gift.Entity.WishEntity;
 import gift.Repository.WishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class WishService {
     public Page<WishDTO> getWishes(Pageable pageable) {
         Page<WishEntity> wishPage = wishRepository.findAll(pageable);
         return wishPage.map(this::convertToDTO);
+    }
+
+    public ResponseEntity<WishEntity> findWishByIdResponse(Long id) {
+        return wishRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     private WishDTO convertToDTO(WishEntity wishEntity) {

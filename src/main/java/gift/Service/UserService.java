@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import gift.Exception.UnauthorizedException;
 
@@ -30,6 +31,13 @@ public class UserService {
     public Page<UserEntity> findAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
+
+    public ResponseEntity<UserEntity> findUserByIdResponse(Long id) {
+        return userRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     public Optional<UserEntity> findUserById(Long id) {
         return userRepository.findById(id);
     }

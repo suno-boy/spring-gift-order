@@ -4,14 +4,12 @@ import gift.DTO.ProductDTO;
 import gift.DTO.WishDTO;
 import gift.DTO.CategoryDTO;
 import gift.DTO.OptionDTO;
-import gift.Entity.ProductEntity;
-import gift.Entity.WishEntity;
-import gift.Entity.CategoryEntity;
-import gift.Entity.OptionEntity;
+import gift.Entity.*;
 import gift.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,6 +61,14 @@ public class ProductService {
         Page<ProductEntity> productPage = productRepository.findAll(pageable);
         return productPage.map(this::convertToDTO);
     }
+
+
+    public ResponseEntity<ProductEntity> findProductByIdResponse(Long id) {
+        return productRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     private ProductDTO convertToDTO(ProductEntity productEntity) {
         ProductDTO productDTO = new ProductDTO();

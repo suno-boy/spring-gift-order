@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,9 +23,7 @@ public class AuthController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable Long id) {
-        return userService.findUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return userService.findUserByIdResponse(id);
     }
 
     @PostMapping("/users")

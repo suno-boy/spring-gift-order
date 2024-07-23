@@ -31,9 +31,7 @@ public class WishController {
 
     @GetMapping("/{id}")
     public ResponseEntity<WishEntity> getWishById(@PathVariable Long id) {
-        return wishService.findWishById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return wishService.findWishByIdResponse(id);
     }
 
     @PostMapping
