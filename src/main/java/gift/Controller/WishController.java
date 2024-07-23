@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import gift.Mapper.WishServiceMapper;
 
 @RestController
 @RequestMapping("/wishes")
@@ -24,6 +25,11 @@ public class WishController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private WishServiceMapper wishServiceMapper;
+
+
+
     @GetMapping
     public Page<WishDTO> getAllWishes(Pageable pageable) {
         return wishService.getWishes(pageable);
@@ -31,7 +37,7 @@ public class WishController {
 
     @GetMapping("/{id}")
     public ResponseEntity<WishEntity> getWishById(@PathVariable Long id) {
-        return wishService.findWishByIdResponse(id);
+        return wishService.wishServiceMapper.findWishByIdResponse(id);
     }
 
     @PostMapping
