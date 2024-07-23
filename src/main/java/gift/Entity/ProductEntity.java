@@ -80,4 +80,19 @@ public class ProductEntity {
         return category;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setWishes(List<WishEntity> wishes) {
+        this.wishes = wishes;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
+
+    public void setOptions(List<OptionEntity> options) {
+        this.options = options;
+    }
 }

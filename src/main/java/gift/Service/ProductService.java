@@ -36,6 +36,22 @@ public class ProductService {
         return productRepository.save(productEntity);
     }
 
+    public ProductEntity updateProduct(Long id, ProductEntity productEntity) {
+        Optional<ProductEntity> existingProductOpt = productRepository.findById(id);
+        if (existingProductOpt.isPresent()) {
+            ProductEntity existingProduct = existingProductOpt.get();
+            existingProduct.setName(productEntity.getName());
+            existingProduct.setPrice(productEntity.getPrice());
+            existingProduct.setImageUrl(productEntity.getImageUrl());
+            existingProduct.setCategory(productEntity.getCategory());
+            existingProduct.setWishes(productEntity.getWishes());
+            existingProduct.setOptions(productEntity.getOptions());
+            return productRepository.save(existingProduct);
+        } else {
+            throw new RuntimeException("변경하려는 상품이 존재하지 않습니다.");
+        }
+    }
+
     public void deleteProduct(Long id) {
         // ProductEntity에서 WishEntity와의 연관 관계를
         // cascade = CascadeType.ALL로 설정해놓았기 때문에
