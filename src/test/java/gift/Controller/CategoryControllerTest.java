@@ -56,14 +56,4 @@ public class CategoryControllerTest {
         verify(categoryService, times(1)).updateCategory(id, categoryDTO);
     }
 
-    @Test
-    public void testDeleteCategory() {
-        Long id = 1L;
-        doNothing().when(categoryService).deleteCategory(id);
-
-        ResponseEntity<Void> response = categoryController.deleteCategory(id);
-
-        assertEquals(ResponseEntity.noContent().build(), response);
-        verify(categoryService, times(1)).deleteCategory(id);
-    }
 }

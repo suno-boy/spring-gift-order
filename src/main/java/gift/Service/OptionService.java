@@ -75,7 +75,7 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
-    // Private methods
+    // 멘토님의 코드중복 피드백으로 반영을 위해 생성한 Private methods
     private OptionEntity findOptionEntityById(Long id) {
         return optionRepository.findById(id).orElseThrow(() -> new RuntimeException("Option을 찾을 수 없습니다."));
     }

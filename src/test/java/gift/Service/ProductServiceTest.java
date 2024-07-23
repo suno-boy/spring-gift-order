@@ -40,9 +40,16 @@ public class ProductServiceTest {
 
         Page<ProductDTO> result = productService.getProducts(pageable);
 
-        assertEquals(2, result.getTotalElements());
-        assertEquals(2, result.getContent().size());
-        assertEquals("Product1", result.getContent().get(0).getName());
-        assertEquals("Product2", result.getContent().get(1).getName());
+        assertProductPage(productPage, result);
+    }
+
+    private void assertProductPage(Page<ProductEntity> expectedPage, Page<ProductDTO> actualPage) {
+        assertEquals(expectedPage.getTotalElements(), actualPage.getTotalElements());
+        assertEquals(expectedPage.getContent().size(), actualPage.getContent().size());
+        for (int i = 0; i < expectedPage.getContent().size(); i++) {
+            assertEquals(expectedPage.getContent().get(i).getName(), actualPage.getContent().get(i).getName());
+            assertEquals(expectedPage.getContent().get(i).getPrice(), actualPage.getContent().get(i).getPrice());
+            assertEquals(expectedPage.getContent().get(i).getImageUrl(), actualPage.getContent().get(i).getImageUrl());
+        }
     }
 }
