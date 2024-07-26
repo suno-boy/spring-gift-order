@@ -20,7 +20,6 @@
   - [X] KakaoUserService 구현
     - 구현 메서드
       1) KakaoOAuthService를 통해 카카오로부터 받아온 사용자 정보를 서버 쪽 DB에 저장한다.
-      2) 
   - [X] KakaoAuthService 구현
     - 구현 메서드
       1) KakaoUserService, KakaoAuthService의 메서드들을 조합해서 인가코드 -> 토큰 -> 사용자 정보 -> 서버 DB 까지의 일련의 과정을 수행함.
