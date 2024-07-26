@@ -26,13 +26,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String authorizationHeader = webRequest.getHeader("Authorization");
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Missing or invalid Authorization header");
+        String token = webRequest.getHeader("인증 되었습니다.");
+        if (token != null && userService.validateToken(token)) {
+            return userService.getUserFromToken(token);
+        } else {
+            throw new UnauthorizedException("인증되지 않았습니다.");
         }
-
-        String token = authorizationHeader.substring(7);
-        return userService.getUserFromToken(token)
-                .orElseThrow(() -> new UnauthorizedException("Invalid token"));
     }
 }

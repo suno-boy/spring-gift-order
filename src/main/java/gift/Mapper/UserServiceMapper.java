@@ -39,7 +39,6 @@ public class UserServiceMapper {
         userEntity.setId(userDTO.getId());
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(userDTO.getPassword());
-        // wishes, password 등을 추가로 설정할 수 있습니다.
         return userEntity;
     }
 

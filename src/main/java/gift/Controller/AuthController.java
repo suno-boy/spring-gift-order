@@ -1,5 +1,7 @@
 package gift.Controller;
 
+import gift.DTO.AuthRequestDTO;
+import gift.DTO.AuthResponseDTO;
 import gift.DTO.UserDTO;
 import gift.Service.UserService;
 import gift.Mapper.UserServiceMapper;
@@ -17,10 +19,18 @@ public class AuthController {
     @Autowired
     private UserServiceMapper userServiceMapper;
 
+    // 회원가입
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         UserDTO savedUser = userService.saveUser(userDTO);
         return ResponseEntity.ok(savedUser);
+    }
+
+    // 로그인(토큰 발급)
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> loginUser(@RequestBody AuthRequestDTO authRequest) {
+        String token = userService.loginUser(authRequest);
+        return ResponseEntity.ok(new AuthResponseDTO(token));
     }
 
     @GetMapping("/user/{id}")
