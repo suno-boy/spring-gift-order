@@ -11,12 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/product-views")
 public class ProductViewController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products/view")
+    @GetMapping
     public String viewAllProducts(Pageable pageable, Model model) {
         Page<ProductDTO> productPage = productService.getProducts(pageable);
         model.addAttribute("products", productPage.getContent());
@@ -24,19 +25,19 @@ public class ProductViewController {
         return "product-list";
     }
 
-    @GetMapping("/products/view/{id}")
+    @GetMapping("/{id}")
     public String viewProductById(@PathVariable Long id, Model model) {
         productService.findProductById(id).ifPresent(product -> model.addAttribute("product", product));
         return "product-detail";
     }
 
-    @PostMapping("/products")
+    @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO savedProduct = productService.saveProduct(productDTO);
         return ResponseEntity.ok(savedProduct);
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         try {
             ProductDTO updatedProduct = productService.updateProduct(id, productDTO);
@@ -46,7 +47,7 @@ public class ProductViewController {
         }
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
