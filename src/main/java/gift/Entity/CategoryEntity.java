@@ -32,10 +32,6 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, String code) {
-        this.name = name;
-    }
-
     public Long getId() {
         return id;
     }
@@ -56,43 +52,12 @@ public class CategoryEntity {
         return parent;
     }
 
-    public void setParent(CategoryEntity parent) {
-        this.parent = parent;
-    }
-
     public List<CategoryEntity> getChildren() {
         return children;
-    }
-
-    public void setChildren(List<CategoryEntity> children) {
-        this.children = children;
-    }
-
-    public void addChild(CategoryEntity child) {
-        child.setParent(this);
-        this.children.add(child);
-    }
-
-    public void removeChild(CategoryEntity child) {
-        child.setParent(null);
-        this.children.remove(child);
     }
 
     public List<ProductEntity> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductEntity> products) {
-        this.products = products;
-    }
-
-    public void addProduct(ProductEntity product) {
-        product.setCategory(this);
-        this.products.add(product);
-    }
-
-    public void removeProduct(ProductEntity product) {
-        product.setCategory(null);
-        this.products.remove(product);
-    }
 }

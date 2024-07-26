@@ -32,43 +32,38 @@ public class OptionControllerTest {
 
     @Test
     void testCreateOption() {
-        OptionDTO optionDTO = new OptionDTO(1L, "Option1", 10L, 1L);
+        OptionDTO optionDTO = createSampleOptionDTO();
         when(optionService.createOption(any(OptionDTO.class))).thenReturn(optionDTO);
 
         ResponseEntity<OptionDTO> response = optionController.createOption(optionDTO);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(optionDTO, response.getBody());
+        assertResponse(response, HttpStatus.OK, optionDTO);
     }
 
     @Test
     void testGetOptionById() {
-        OptionDTO optionDTO = new OptionDTO(1L, "Option1", 10L, 1L);
+        OptionDTO optionDTO = createSampleOptionDTO();
         when(optionService.getOptionById(1L)).thenReturn(optionDTO);
 
         ResponseEntity<OptionDTO> response = optionController.getOptionById(1L);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(optionDTO, response.getBody());
+        assertResponse(response, HttpStatus.OK, optionDTO);
     }
 
     @Test
     void testGetAllOptions() {
-        List<OptionDTO> optionList = new ArrayList<>();
-        optionList.add(new OptionDTO(1L, "Option1", 10L, 1L));
+        List<OptionDTO> optionList = createSampleOptionList();
         when(optionService.getAllOptions()).thenReturn(optionList);
 
         ResponseEntity<List<OptionDTO>> response = optionController.getAllOptions();
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(optionList, response.getBody());
+        assertResponse(response, HttpStatus.OK, optionList);
     }
 
     @Test
     void testUpdateOption() {
-        OptionDTO optionDTO = new OptionDTO(1L, "Option1", 10L, 1L);
+        OptionDTO optionDTO = createSampleOptionDTO();
         when(optionService.updateOption(eq(1L), any(OptionDTO.class))).thenReturn(optionDTO);
 
         ResponseEntity<OptionDTO> response = optionController.updateOption(1L, optionDTO);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(optionDTO, response.getBody());
+        assertResponse(response, HttpStatus.OK, optionDTO);
     }
 
     @Test
@@ -78,5 +73,20 @@ public class OptionControllerTest {
         ResponseEntity<Void> response = optionController.deleteOption(1L);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(optionService, times(1)).deleteOption(1L);
+    }
+
+    private OptionDTO createSampleOptionDTO() {
+        return new OptionDTO(1L, "Option1", 10L, 1L);
+    }
+
+    private List<OptionDTO> createSampleOptionList() {
+        List<OptionDTO> optionList = new ArrayList<>();
+        optionList.add(createSampleOptionDTO());
+        return optionList;
+    }
+
+    private <T> void assertResponse(ResponseEntity<T> response, HttpStatus status, T expectedBody) {
+        assertEquals(status, response.getStatusCode());
+        assertEquals(expectedBody, response.getBody());
     }
 }

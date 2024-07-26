@@ -2,15 +2,13 @@ package gift.Service;
 
 import gift.DTO.WishDTO;
 import gift.Entity.WishEntity;
+import gift.Mapper.WishServiceMapper;
 import gift.Repository.WishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class WishService {
@@ -18,33 +16,39 @@ public class WishService {
     @Autowired
     private WishRepository wishRepository;
 
-    public List<WishEntity> findAllWishes() {
-        return wishRepository.findAll();
+    @Autowired
+    private WishServiceMapper wishServiceMapper;
+
+    public List<WishDTO> findAllWishes() {
+        List<WishEntity> wishEntities = wishRepository.findAll();
+        return wishServiceMapper.convertToWishDTOs(wishEntities);
     }
 
-    public Optional<WishEntity> findWishById(Long id) {
-        return wishRepository.findById(id);
+    public Optional<WishDTO> findWishById(Long id) {
+        Optional<WishEntity> wishEntity = wishRepository.findById(id);
+        return wishEntity.map(wishServiceMapper::convertToDTO);
     }
 
-    public WishEntity saveWish(WishEntity wishEntity) {
-        return wishRepository.save(wishEntity);
+    public WishDTO saveWish(WishDTO wishDTO) {
+        WishEntity wishEntity = wishServiceMapper.convertToEntity(wishDTO);
+        WishEntity savedWishEntity = wishRepository.save(wishEntity);
+        return wishServiceMapper.convertToDTO(savedWishEntity);
+    }
+
+    public WishDTO updateWish(Long id, WishDTO wishDTO) {
+        Optional<WishEntity> existingWish = wishRepository.findById(id);
+        if (existingWish.isPresent()) {
+            WishEntity wish = existingWish.get();
+            wish.setProduct(wishServiceMapper.convertToProductEntity(wishDTO.getProductId()));
+            wish.setUser(wishServiceMapper.convertToUserEntity(wishDTO.getUserId()));
+            WishEntity updatedWishEntity = wishRepository.save(wish);
+            return wishServiceMapper.convertToDTO(updatedWishEntity);
+        } else {
+            throw new RuntimeException("Wish not found");
+        }
     }
 
     public void deleteWish(Long id) {
         wishRepository.deleteById(id);
-    }
-
-    public Page<WishDTO> getWishes(Pageable pageable) {
-        Page<WishEntity> wishPage = wishRepository.findAll(pageable);
-        return wishPage.map(this::convertToDTO);
-    }
-
-    private WishDTO convertToDTO(WishEntity wishEntity) {
-        return new WishDTO(
-                wishEntity.getId(),
-                wishEntity.getUser().getId(),
-                wishEntity.getProduct().getId(),
-                wishEntity.getProductName()
-        );
     }
 }

@@ -1,18 +1,11 @@
 package gift.DTO;
 
 public class AuthResponseDTO {
+    private String token;
+    private String type = "Bearer";
 
-    private String accessToken;
-
-    public AuthResponseDTO(String accessToken) {
-        this.accessToken = accessToken;
+    public AuthResponseDTO(String token) {
+        this.token = token;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
 }

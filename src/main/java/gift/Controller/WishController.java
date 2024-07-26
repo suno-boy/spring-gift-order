@@ -1,15 +1,13 @@
 package gift.Controller;
 
 import gift.DTO.WishDTO;
-import gift.Entity.WishEntity;
 import gift.Service.WishService;
-import gift.Service.UserService;
-import gift.Service.ProductService;
+import gift.Mapper.WishServiceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/wishes")
@@ -19,26 +17,32 @@ public class WishController {
     private WishService wishService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ProductService productService;
+    private WishServiceMapper wishServiceMapper;
 
     @GetMapping
-    public Page<WishDTO> getAllWishes(Pageable pageable) {
-        return wishService.getWishes(pageable);
+    public List<WishDTO> getAllWishes() {
+        return wishService.findAllWishes();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WishEntity> getWishById(@PathVariable Long id) {
-        return wishService.findWishById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<WishDTO> getWishById(@PathVariable Long id) {
+        return wishServiceMapper.toResponseEntity(wishService.findWishById(id));
     }
 
     @PostMapping
-    public WishEntity createWish(@RequestBody WishEntity wishEntity) {
-        return wishService.saveWish(wishEntity);
+    public ResponseEntity<WishDTO> createWish(@RequestBody WishDTO wishDTO) {
+        WishDTO savedWish = wishService.saveWish(wishDTO);
+        return ResponseEntity.ok(savedWish);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<WishDTO> updateWish(@PathVariable Long id, @RequestBody WishDTO wishDTO) {
+        try {
+            WishDTO updatedWish = wishService.updateWish(id, wishDTO);
+            return ResponseEntity.ok(updatedWish);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -21,10 +21,7 @@ public class UserRepositoryTest {
 
         UserEntity savedUser = userRepository.save(user);
 
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getId()).isNotNull();
-        assertThat(savedUser.getEmail()).isEqualTo("test@example.com");
-        assertThat(savedUser.getPassword()).isEqualTo("password123");
+        assertUser(savedUser, "test@example.com", "password123");
     }
 
     @Test
@@ -35,7 +32,13 @@ public class UserRepositoryTest {
         Optional<UserEntity> foundUser = userRepository.findByEmail("unique@example.com");
 
         assertThat(foundUser).isPresent();
-        assertThat(foundUser.get().getEmail()).isEqualTo("unique@example.com");
-        assertThat(foundUser.get().getPassword()).isEqualTo("password456");
+        assertUser(foundUser.get(), "unique@example.com", "password456");
+    }
+
+    private void assertUser(UserEntity user, String expectedEmail, String expectedPassword) {
+        assertThat(user).isNotNull();
+        assertThat(user.getId()).isNotNull();
+        assertThat(user.getEmail()).isEqualTo(expectedEmail);
+        assertThat(user.getPassword()).isEqualTo(expectedPassword);
     }
 }
