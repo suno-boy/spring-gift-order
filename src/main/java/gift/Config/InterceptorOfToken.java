@@ -29,7 +29,7 @@ public class InterceptorOfToken implements HandlerInterceptor {
                 return true; // 요청을 계속 진행하여 사용자가 요청한 컨트롤러로 넘김.
             } else {
                 sendErrorResponse(response, "유효하지 않은 토큰입니다.");
-                return false;
+                return false; // 요청에 false 응답을 줘서 사용자로 하여금 리프레쉬 토큰 요청이 오게 만듦. -> RefreshTokenController로 처리
             }
         } catch (Exception e) {
             sendErrorResponse(response, "토큰 유효성 검증 실패: " + e.getMessage());
