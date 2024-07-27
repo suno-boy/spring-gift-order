@@ -24,10 +24,10 @@
     - 구현 메서드
       1) KakaoUserService, KakaoAuthService의 메서드들을 조합해서 인가코드 -> 토큰 -> 사용자 정보 -> 서버 DB 까지의 일련의 과정을 수행함.
   - [X] KakaoUserMapeer 구현
-  - [ ] KakaoOAuthService에 앱키, 시크릿 키 사용 로직 추가하기
-  - [ ] refreshAccessToken 메서드(엑세스 토큰 갱신) 사용 로직 추가하기
+  - [x] KakaoOAuthService에 앱키, 시크릿 키 사용 로직 추가하기
+  - [x] refreshAccessToken 메서드(엑세스 토큰 갱신) 사용 로직 추가하기
   - [ ] 테스트 코드 추가하기
-  - [x] OAuth말고 기본 회원가입 및 로그인 구현 기능에서 토큰 만료 및 리프레시 구현
+  - [x] OAuth와 기본 로그인 기능에서 토큰 만료 및 리프레시 구현
 
 
 
