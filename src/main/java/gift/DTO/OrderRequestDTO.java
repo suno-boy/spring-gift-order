@@ -4,7 +4,11 @@ public class OrderRequestDTO {
     private Long productId;
     private Long optionId;
     private Long quantity;
+    private Long userId;
 
+    public Long getUserId() {
+        return userId;
+    }
 
     public Long getProductId() {
         return productId;

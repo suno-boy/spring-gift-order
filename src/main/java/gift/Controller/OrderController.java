@@ -1,5 +1,6 @@
 package gift.Controller;
 
+import gift.DTO.KakaoUserDTO;
 import gift.DTO.OrderRequestDTO;
 import gift.DTO.OrderResponseDTO;
 import gift.Service.OrderService;
