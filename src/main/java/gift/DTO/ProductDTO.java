@@ -22,18 +22,20 @@ public class ProductDTO {
 
     public ProductDTO() {}
 
-    public ProductDTO(Long id, String name, int price, String imageUrl, List<WishDTO> wishes, CategoryDTO category, List<OptionDTO> options) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.wishes = wishes;
-        this.category = category;
+    public void setOptions(List<OptionDTO> options) {
         this.options = options;
     }
 
-    public void setOptions(List<OptionDTO> options) {
-        this.options = options;
+    public List<WishDTO> getWishes() {
+        return wishes;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public List<OptionDTO> getOptions() {
+        return options;
     }
 
     public Long getId() {
@@ -68,16 +70,8 @@ public class ProductDTO {
         this.imageUrl = imageUrl;
     }
 
-    public List<WishDTO> getWishes() {
-        return wishes;
-    }
-
     public void setWishes(List<WishDTO> wishes) {
         this.wishes = wishes;
-    }
-
-    public CategoryDTO getCategory() {
-        return category;
     }
 
     public void setCategory(CategoryDTO category) {

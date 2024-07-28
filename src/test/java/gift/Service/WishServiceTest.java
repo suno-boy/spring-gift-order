@@ -34,9 +34,9 @@ public class WishServiceTest {
     @Test
     public void testGetWishes() {
         Pageable pageable = PageRequest.of(0, 10);
-        UserEntity user = new UserEntity(); // Assuming you have a UserEntity class
+        UserEntity user = new UserEntity();
         user.setId(1L);
-        ProductEntity product1 = new ProductEntity(); // Assuming you have a ProductEntity class
+        ProductEntity product1 = new ProductEntity();
         product1.setId(1L);
         ProductEntity product2 = new ProductEntity();
         product2.setId(2L);
@@ -49,13 +49,20 @@ public class WishServiceTest {
 
         Page<WishDTO> result = wishService.getWishes(pageable);
 
-        assertEquals(2, result.getTotalElements());
-        assertEquals(2, result.getContent().size());
-        assertEquals("Wish1", result.getContent().get(0).getProductName());
-        assertEquals("Wish2", result.getContent().get(1).getProductName());
-        assertEquals(1L, result.getContent().get(0).getUserId());
-        assertEquals(1L, result.getContent().get(0).getProductId());
-        assertEquals(1L, result.getContent().get(1).getUserId());
-        assertEquals(2L, result.getContent().get(1).getProductId());
+        assertWishPage(wishPage, result);
+    }
+
+    private void assertWishPage(Page<WishEntity> expectedPage, Page<WishDTO> actualPage) {
+        assertEquals(expectedPage.getTotalElements(), actualPage.getTotalElements());
+        assertEquals(expectedPage.getContent().size(), actualPage.getContent().size());
+        for (int i = 0; i < expectedPage.getContent().size(); i++) {
+            assertWish(expectedPage.getContent().get(i), actualPage.getContent().get(i));
+        }
+    }
+
+    private void assertWish(WishEntity expected, WishDTO actual) {
+        assertEquals(expected.getProductName(), actual.getProductName());
+        assertEquals(expected.getUser().getId(), actual.getUserId());
+        assertEquals(expected.getProduct().getId(), actual.getProductId());
     }
 }

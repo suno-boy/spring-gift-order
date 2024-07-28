@@ -18,8 +18,6 @@ public class OptionDTO {
 
     private Long productId;
 
-    public OptionDTO() {}
-
     public OptionDTO(Long id, String name, Long quantity, Long productId) {
         this.id = id;
         this.name = name;

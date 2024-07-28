@@ -33,11 +33,7 @@ public class WishRepositoryTest {
 
         WishEntity savedWish = wishRepository.save(wish);
 
-        assertThat(savedWish).isNotNull();
-        assertThat(savedWish.getId()).isNotNull();
-        assertThat(savedWish.getUser().getId()).isEqualTo(user.getId());
-        assertThat(savedWish.getProduct().getId()).isEqualTo(product.getId());
-        assertThat(savedWish.getProductName()).isEqualTo("Product Name");
+        assertWish(savedWish, user, product, "Product Name");
     }
 
     @Test
@@ -54,8 +50,14 @@ public class WishRepositoryTest {
         Optional<WishEntity> foundWish = wishRepository.findById(savedWish.getId());
 
         assertThat(foundWish).isPresent();
-        assertThat(foundWish.get().getUser().getId()).isEqualTo(user.getId());
-        assertThat(foundWish.get().getProduct().getId()).isEqualTo(product.getId());
-        assertThat(foundWish.get().getProductName()).isEqualTo("Another Product");
+        assertWish(foundWish.get(), user, product, "Another Product");
+    }
+
+    private void assertWish(WishEntity wish, UserEntity expectedUser, ProductEntity expectedProduct, String expectedProductName) {
+        assertThat(wish).isNotNull();
+        assertThat(wish.getId()).isNotNull();
+        assertThat(wish.getUser().getId()).isEqualTo(expectedUser.getId());
+        assertThat(wish.getProduct().getId()).isEqualTo(expectedProduct.getId());
+        assertThat(wish.getProductName()).isEqualTo(expectedProductName);
     }
 }

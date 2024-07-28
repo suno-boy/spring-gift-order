@@ -40,6 +40,10 @@ public class ProductEntity {
         this.imageUrl = imageUrl;
     }
 
+    public ProductEntity(Long productId) {
+        this.id = productId;
+    }
+
     public List<OptionEntity> getOptions() {
         return options;
     }
@@ -72,23 +76,27 @@ public class ProductEntity {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public List<WishEntity> getWishes() {
         return wishes;
-    }
-
-    public void setWishes(List<WishEntity> wishes) {
-        this.wishes = wishes;
     }
 
     public CategoryEntity getCategory() {
         return category;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setWishes(List<WishEntity> wishes) {
+        this.wishes = wishes;
+    }
+
     public void setCategory(CategoryEntity category) {
         this.category = category;
+    }
+
+    public void setOptions(List<OptionEntity> options) {
+        this.options = options;
     }
 }

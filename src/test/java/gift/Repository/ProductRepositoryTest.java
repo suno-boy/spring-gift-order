@@ -23,10 +23,7 @@ public class ProductRepositoryTest {
 
         ProductEntity savedProduct = productRepository.save(product);
 
-        assertThat(savedProduct).isNotNull();
-        assertThat(savedProduct.getId()).isNotNull();
-        assertThat(savedProduct.getName()).isEqualTo("Test Product");
-        assertThat(savedProduct.getPrice()).isEqualTo(100);
+        assertProduct(savedProduct, "Test Product", 100);
     }
 
     @Test
@@ -39,7 +36,13 @@ public class ProductRepositoryTest {
         Optional<ProductEntity> foundProduct = productRepository.findByName("Unique Product");
 
         assertThat(foundProduct).isPresent();
-        assertThat(foundProduct.get().getName()).isEqualTo("Unique Product");
-        assertThat(foundProduct.get().getPrice()).isEqualTo(200);
+        assertProduct(foundProduct.get(), "Unique Product", 200);
+    }
+
+    private void assertProduct(ProductEntity product, String expectedName, int expectedPrice) {
+        assertThat(product).isNotNull();
+        assertThat(product.getId()).isNotNull();
+        assertThat(product.getName()).isEqualTo(expectedName);
+        assertThat(product.getPrice()).isEqualTo(expectedPrice);
     }
 }

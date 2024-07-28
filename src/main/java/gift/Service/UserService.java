@@ -1,24 +1,75 @@
 package gift.Service;
 
+import gift.DTO.AuthRequestDTO;
+import gift.DTO.UserDTO;
 import gift.Entity.UserEntity;
+import gift.Mapper.UserServiceMapper;
 import gift.Repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import gift.Exception.UnauthorizedException; // 추가된 import
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserServiceMapper userServiceMapper;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserServiceMapper userServiceMapper) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userServiceMapper = userServiceMapper;
+    }
+
+
+
+    public String loginUser(AuthRequestDTO authRequest) {
+        UserEntity userEntity = userRepository.findByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("이메일이 잘못 입력되었습니다."));
+
+        if (passwordEncoder.matches(authRequest.getPassword(), userEntity.getPassword())) {
+            return generateToken(userEntity);
+        } else {
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
+    }
+
+
+    public Optional<UserDTO> findUserById(Long id) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        return userEntity.map(userServiceMapper::convertToDTO);
+    }
+
+    public UserDTO saveUser(UserDTO userDTO) {
+        UserEntity userEntity = userServiceMapper.convertToEntity(userDTO);
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+        return userServiceMapper.convertToDTO(savedUserEntity);
+    }
+
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        Optional<UserEntity> existingUser = userRepository.findById(id);
+        if (existingUser.isPresent()) {
+            UserEntity user = existingUser.get();
+            user.setEmail(userDTO.getEmail());
+            UserEntity updatedUserEntity = userRepository.save(user);
+            return userServiceMapper.convertToDTO(updatedUserEntity);
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -26,27 +77,9 @@ public class UserService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public List<UserEntity> findAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public Optional<UserEntity> findUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public UserEntity saveUser(UserEntity userEntity) {
-        return userRepository.save(userEntity);
-    }
-
-    public void deleteUser(Long id) {
-        // UserEntity에서 WishEntity와의 연관 관계를
-        // cascade = CascadeType.ALL로 설정해놓았기 때문에
-        // 관련 Wish는 따로 삭제할 필요가 없음.
-        userRepository.deleteById(id);
-    }
-
     public String generateToken(UserEntity userEntity) {
-        Claims claims = createClaims(userEntity);
+        Claims claims = Jwts.claims().setSubject(userEntity.getEmail());
+        claims.put("userId", userEntity.getId());
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + expiration);
 
@@ -60,8 +93,11 @@ public class UserService {
 
     public boolean validateToken(String token) {
         try {
-            Claims claims = getClaimsFromToken(token);
-            return claims != null && claims.getSubject() != null && !claims.getExpiration().before(new Date());
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject() != null && !claims.getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
@@ -69,31 +105,14 @@ public class UserService {
 
     public Optional<UserEntity> getUserFromToken(String token) {
         try {
-            Claims claims = getClaimsFromToken(token);
-            if (claims != null) {
-                Long userId = claims.get("userId", Long.class);
-                return userRepository.findById(userId);
-            }
-        } catch (Exception e) {
-            throw new UnauthorizedException("Invalid token", e);
-        }
-        return Optional.empty();
-    }
-
-    private Claims createClaims(UserEntity userEntity) {
-        Claims claims = Jwts.claims().setSubject(userEntity.getEmail());
-        claims.put("userId", userEntity.getId());
-        return claims;
-    }
-
-    private Claims getClaimsFromToken(String token) {
-        try {
-            return Jwts.parser()
+            Claims claims = Jwts.parser()
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
+            Long userId = claims.get("userId", Long.class);
+            return userRepository.findById(userId);
         } catch (Exception e) {
-            throw new UnauthorizedException("Invalid token", e);
+            return Optional.empty();
         }
     }
 }
